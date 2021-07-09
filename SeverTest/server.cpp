@@ -16,17 +16,32 @@ Server::Server(QObject *parent)
 
 }
 
+void Server::sendDataToAllClient(const QByteArray &data)
+{
+    foreach(QTcpSocket *socket,socketList){
+        socket->write(data);
+    }
+
+}
+
 void Server::newConnectionSlot()
 {
 
-    qDebug() << "New Connection";
+    qDebug() << "[+] New Connection!";
     QTcpSocket *socket = server->nextPendingConnection();
+
+    socketList.append(socket);
 
     socket->write("Hello");
     connect(socket,
             &QTcpSocket::readyRead,
             this,
             &Server::socketReadyReadSlot);
+
+    connect(socket,
+            &QTcpSocket::disconnected,
+            this,
+            &Server::socketDisconnectedSlot);
 
     connect(socket,
             &QTcpSocket::stateChanged,
@@ -41,8 +56,20 @@ void Server::socketReadyReadSlot()
 
     QByteArray data;
     data = socket->readAll();
-    QString str = QString::fromLocal8Bit(data);
-    qDebug() << str;
+    //QString str = QString::fromLocal8Bit(data);
+    //qDebug() << str;
+
+    sendDataToAllClient("[" +
+                        socket->peerAddress().toString().toLocal8Bit() +
+                        "]" + data);
+}
+
+void Server::socketDisconnectedSlot()
+{
+    QTcpSocket *socket = qobject_cast<QTcpSocket *> (sender());
+
+    socketList.removeOne(socket);
+    qDebug() << "[-] Remove one Connection!";
 }
 
 void Server::stateChange()
