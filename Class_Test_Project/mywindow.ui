@@ -1,20 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>MyWindow</class>
- <widget class="QWidget" name="MyWindow" >
-  <property name="geometry" >
+ <widget class="QWidget" name="MyWindow">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>588</width>
+    <height>318</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>MyWindow</string>
   </property>
+  <layout class="QGridLayout" name="gridLayout_3">
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout" columnstretch="1,1,1">
+     <item row="0" column="1">
+      <widget class="QCheckBox" name="checkBox">
+       <property name="text">
+        <string>CheckBox</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>PushButton</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
  </widget>
- <layoutDefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
+ <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MyWindow</receiver>
+   <slot>slotsTest2()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>162</x>
+     <y>132</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>630</x>
+     <y>87</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>slotsTest2()</slot>
+ </slots>
 </ui>
