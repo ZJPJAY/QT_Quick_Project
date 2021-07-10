@@ -31,5 +31,17 @@ void ChatPage::readDataSlot(QByteArray data)
 
 void ChatPage::on_leSendData_returnPressed()
 {
-    client->sendData(ui->leSendData->text().toLocal8Bit());
+    if(ui->leSendAddress->text().toLocal8Bit().length() == 0){
+        QString str ;
+        str.fill(' ',25);
+
+        client->sendData(str.toLocal8Bit() + ui->leSendData->text().toLocal8Bit());
+    }
+    else {
+        QString str;
+        str.fill(' ',25-ui->leSendAddress->text().length());
+
+        client->sendData(ui->leSendAddress->text().toLocal8Bit() + str.toLocal8Bit() + ui->leSendData->text().toLocal8Bit());
+    }
+
 }

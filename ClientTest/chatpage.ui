@@ -20,7 +20,14 @@
       <widget class="QTextBrowser" name="tbReadData"/>
      </item>
      <item>
-      <widget class="QLineEdit" name="leSendData"/>
+      <layout class="QHBoxLayout" name="horizontalLayout" stretch="2,1">
+       <item>
+        <widget class="QLineEdit" name="leSendData"/>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="leSendAddress"/>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>
