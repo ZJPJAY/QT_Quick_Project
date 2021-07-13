@@ -1,0 +1,11 @@
+release/mytcpserver.o
+release/mytcpsocket.o
+release/mythread.o
+release/threadhandle.o
+release/sqlexec.o
+release/main.o
+release/moc_mytcpserver.o
+release/moc_mytcpsocket.o
+release/moc_mythread.o
+release/moc_threadhandle.o
+release/moc_sqlexec.o
