@@ -4,9 +4,9 @@
 #include <QSqlQuery>
 #include <QSqlError>
 
-SqlExec::SqlExec(QObject *parent) : QObject(parent)
+SqlExec::SqlExec(QString name,QObject *parent) : QObject(parent)
 {
-    db = new QSqlDatabase(QSqlDatabase::addDatabase("QMYSQL"));
+    db = new QSqlDatabase(QSqlDatabase::addDatabase("QMYSQL",name));
 
     db->setHostName("127.0.0.1");
     db->setPort(3306);
@@ -25,7 +25,7 @@ bool SqlExec::addValue(int id, QString name)
     cmd = QString("Insert into zjctabletest (id,name) "
                   "values (%1,'%2')").arg(id).arg(name);
 
-    QSqlQuery query;
+    QSqlQuery query(*db);
     bool ok = query.exec(cmd);
     QString qd = (ok==1)? "[+] Insert Success!":"[-] Insert Failed!";
     qDebug() << qd.toUtf8().data();
@@ -37,7 +37,7 @@ bool SqlExec::selectValue(QString tableName)
     QString cmd;
     cmd = QString("Select * From %1").arg(tableName);
 
-    QSqlQuery query;
+    QSqlQuery query(*db);
     bool ok = query.exec(cmd);
     QString qd = (ok==1)? "[+] Success!":"[-] Failed!";
     qDebug() << qd.toUtf8().data();

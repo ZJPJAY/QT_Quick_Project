@@ -8,7 +8,7 @@ class SqlExec : public QObject
 {
     Q_OBJECT
 public:
-    explicit SqlExec(QObject *parent = nullptr);
+    explicit SqlExec(QString name, QObject *parent = nullptr);
     bool addValue(int id,QString name);
     bool selectValue(QString tableName);
     bool deleteValue(QString tableName,QString typeName,QString deleteThing);

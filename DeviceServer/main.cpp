@@ -1,18 +1,15 @@
 #include <QCoreApplication>
 #include "mytcpserver.h"
-#include "sqlexec.h"
-#include <QDebug>
+#include "threadhandle.h"
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
+    ThreadHandle::getObject();
+
     MyTcpServer s;
     s.listen(QHostAddress::Any, 10001);
-    
-    SqlExec sql;
-    sql.addValue(3,"张三");
-    sql.selectValue("zjctabletest");
 
     return a.exec();
 }

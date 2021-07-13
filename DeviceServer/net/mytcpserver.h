@@ -21,7 +21,7 @@ protected:
     virtual void incomingConnection(qintptr socketDescriptor);
 
 protected slots:
-    void socketDisconnectedSlot();
+    void socketDisconnectedSlot(QThread *th);
 
 signals:
 
