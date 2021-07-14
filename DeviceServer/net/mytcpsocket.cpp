@@ -4,6 +4,7 @@
 #include <QThread>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QHostAddress>
 
 MyTcpSocket::MyTcpSocket(QObject *parent) : QTcpSocket(parent)
 {
@@ -16,6 +17,8 @@ MyTcpSocket::MyTcpSocket(QObject *parent) : QTcpSocket(parent)
             &MyTcpSocket::disconnected,
             this,
             &MyTcpSocket::disconnectedSlot);
+
+    qDebug() << "[+] New Tcp Conecting!";
 }
 
 void MyTcpSocket::setDB(SqlExec *db)
@@ -23,12 +26,22 @@ void MyTcpSocket::setDB(SqlExec *db)
     sqlExec = db;
 }
 
+void MyTcpSocket::sendDataSlot(QByteArray data)
+{
+    this->write(data);
+}
+
 void MyTcpSocket::readyReadSlot()
 {
     QByteArray data;
-    data = this->readAll();
-    qDebug() << data;
-    handleData(data);
+    data = this->readAll();//读取所有数据到data中缓存
+    qDebug() << QString("").fill('>',25).toUtf8().data();
+
+    QHostAddress tmp;
+    tmp.setAddress(this->peerAddress().toIPv4Address());
+    qDebug() << tmp.toString().toUtf8().data() << ":" << this->peerPort(); //<<QString(data).toUtf8().data();
+    handleData(data);//解析data中的数据并继续传输到相应的位置
+    qDebug() << QString("").fill('<',25).toUtf8().data();
 }
 
 void MyTcpSocket::disconnectedSlot()
@@ -36,7 +49,7 @@ void MyTcpSocket::disconnectedSlot()
     emit socketDisconnected(thread());
 }
 
-void MyTcpSocket::handleData(QByteArray data)
+void MyTcpSocket::handleData(QByteArray data)//解析完整的Json格式数据
 {
     temp.append(data);
     int count = 0;
@@ -68,11 +81,62 @@ void MyTcpSocket::handleFrame(QByteArray data)
 {
     QJsonObject obj = QJsonDocument::fromJson(data).object();
 
-    if(obj.value("AlarmLight").toInt() == 2001){//得到键值进行比对
-        qDebug() << "AlarmLight On/Off";
-    }
-    if(obj.value("AlarmAlert").toInt() == 2002){
-        qDebug() << "AlarmAlert On/Off";
-    }
+    if(obj.contains("Sender")){//得到温度键值进行比对
+        if(obj.value("Sender") == "gateway"){
+            qDebug() << "Data:";
+            qDebug() << "{";
 
+            if(obj.value("Name") == 1001){
+                qDebug() << "   Temperature: " << obj.value("Value").toDouble();
+
+                this->sqlExec->addValue(this->sqlExec->selectValue("models_temperature")
+                                        ,obj.value("Value").toDouble(),"models_temperature","temperature");
+            }
+            if(obj.value("Name") == 1002){
+                qDebug() << "   Humidity: " << obj.value("Value").toDouble();
+
+                this->sqlExec->addValue(this->sqlExec->selectValue("models_Humidity")
+                                        ,obj.value("Value").toDouble(),"models_Humidity","humidity_consistence");
+            }
+            if(obj.value("Name") == 1003){
+                qDebug() << "   LightIntensity: " << obj.value("Value").toDouble();
+
+                this->sqlExec->addValue(this->sqlExec->selectValue("models_light")
+                                        ,obj.value("Value").toDouble(),"models_light","illumination");
+            }
+            if(obj.value("Name") == 1004){
+                qDebug() << "   UltraRays: " << obj.value("Value").toDouble();
+
+                this->sqlExec->addValue(this->sqlExec->selectValue("models_uv")
+                                        ,obj.value("Value").toInt(),"models_uv","ultraviolet_rays");
+            }
+            if(obj.value("Name") == 1005){
+                qDebug() << "   CO2: " << obj.value("Value").toDouble();
+
+                this->sqlExec->addValue(this->sqlExec->selectValue("models_co2")
+                                        ,obj.value("Value").toInt(),"models_co2","co2_consistence");
+            }
+            if(obj.value("Name.5") == 1006){
+                qDebug() << "   PM2.5: " << obj.value("Value").toDouble();
+
+                this->sqlExec->addValue(this->sqlExec->selectValue("models_pm25")
+                                        ,obj.value("Value").toInt(),"models_pm25","pm25_consistence");
+            }
+            qDebug() << "}";
+            if(obj.value("Name") == 2001 || obj.value("Name") == 2002){
+                //sendDataToAllClient(data);
+                qDebug() << QString(data).toUtf8().data();
+            }
+        }
+        else if(obj.value("Sender") == "access layer"){
+
+        }
+        else if(obj.value("Sender") == "back end"){
+            if(obj.value("Name") == 2001 || obj.value("Name") == 2002){
+                qDebug() << "   Signal: " << obj.value("Name").toInt() << "  Value: " << obj.value("Value").toInt();
+                emit sendData(data);
+                //触发MyTcpSocket的sendData信号，该信号在MyTcpServer中也定义了，所以可以在Server上两者相绑定
+            }
+        }
+    }
 }

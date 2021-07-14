@@ -17,6 +17,9 @@ class MyTcpServer : public QTcpServer
 public:
     explicit MyTcpServer(QObject *parent = nullptr);
 
+signals:
+    void sendData(QByteArray data);//该触发信号与MyTcpSocket上的同名，以socket上的信号触发该信号
+
 protected:
     virtual void incomingConnection(qintptr socketDescriptor);
 

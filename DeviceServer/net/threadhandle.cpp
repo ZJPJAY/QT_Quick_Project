@@ -6,11 +6,11 @@ ThreadHandle *ThreadHandle::thObj = nullptr;
 
 ThreadHandle::ThreadHandle(QObject *parent) : QObject(parent)
 {
-    for(int i = 0;i < 10;i++){
+    for(int i = 0;i < 10;i++){//创建十个数据库连接并将其移到线程来管理
         SqlExec *db = new SqlExec(
                     QString("DBCon-%1").arg(i)
                     );
-        MyThread *thread = new MyThread;
+        MyThread *thread = new MyThread;//创建新线程
         thread->setDB(db);
 
         db->moveToThread(thread);//数据库的操作移到线程中
@@ -19,14 +19,14 @@ ThreadHandle::ThreadHandle(QObject *parent) : QObject(parent)
     }
 }
 
-ThreadHandle *ThreadHandle::getObject()
+ThreadHandle *ThreadHandle::getObject()//获得单一线程池
 {
     if(thObj == nullptr)
         thObj = new ThreadHandle;
     return thObj;
 }
 
-MyThread *ThreadHandle::getThread()
+MyThread *ThreadHandle::getThread()//获得连接数最少的线程并返回
 {
     int index = 0;
     int minCount = threadList.at(0)->getCount();
@@ -50,4 +50,3 @@ void ThreadHandle::removeThread(MyThread *th)
         }
     }
 }
-
