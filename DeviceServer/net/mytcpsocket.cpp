@@ -122,20 +122,23 @@ void MyTcpSocket::handleFrame(QByteArray data)
                 this->sqlExec->addValue(this->sqlExec->selectValue("models_pm25")
                                         ,obj.value("Value").toInt(),"models_pm25","pm25_consistence");
             }
-            qDebug() << "}";
-            if(obj.value("Name") == 2001 || obj.value("Name") == 2002){
-                //sendDataToAllClient(data);
-                qDebug() << QString(data).toUtf8().data();
-            }
-        }
-        else if(obj.value("Sender") == "access layer"){
-
-        }
-        else if(obj.value("Sender") == "back end"){
             if(obj.value("Name") == 2001 || obj.value("Name") == 2002){
                 qDebug() << "   Signal: " << obj.value("Name").toInt() << "  Value: " << obj.value("Value").toInt();
                 emit sendData(data);
                 //触发MyTcpSocket的sendData信号，该信号在MyTcpServer中也定义了，所以可以在Server上两者相绑定
+            }
+            qDebug() << "}";
+        }
+        else if(obj.value("Sender") == "access layer"){
+            qDebug() << "[!] Warning: Sender is access layer! Nothing to do but testing!";
+
+            qDebug() << obj;
+            emit sendData(data);
+        }
+        else if(obj.value("Sender") == "back end"){
+            if(obj.value("Name") == 2001 || obj.value("Name") == 2002){
+                qDebug() << "   Signal: " << obj.value("Name").toInt() << "  Value: " << obj.value("Value").toInt();
+                emit sendData(data);//等同gateway该处判断
             }
         }
     }

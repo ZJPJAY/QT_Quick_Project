@@ -42,7 +42,6 @@ bool SqlExec::addValue(int id,double value,QString tableName,QString propertyNam
                   "(id, %2, add_time) "
                   "VALUES(%3,%4,'%5');").arg(tableName).arg(propertyName).arg(id).arg(value).arg(current_date);
 
-
     QSqlQuery query(*db);
     bool ok = query.exec(cmd);
     QString qd = (ok==1)? "[+] Insert Success!":"[-] Insert Failed!";
@@ -51,7 +50,7 @@ bool SqlExec::addValue(int id,double value,QString tableName,QString propertyNam
     if(db->lastError().type() != 0)qDebug() << db->lastError().text().toUtf8().data();
     return ok;
 }
-
+/*
 bool SqlExec::addValue(int id, int value)
 {
     QString cmd;
@@ -70,7 +69,7 @@ bool SqlExec::addValue(int id, int value)
     if(db->lastError().type() != 0)qDebug() << db->lastError().text().toUtf8().data();
     return ok;
 }
-
+*/
 int SqlExec::selectValue(QString tableName)
 {
     QString cmd;
@@ -87,9 +86,9 @@ int SqlExec::selectValue(QString tableName)
     if(db->lastError().type() != 0)qDebug() << db->lastError().text().toUtf8().data();
 
     if(!ok){qDebug()<< "[-] SelectValue Return False!"; return false;}
-    while(query.next()){
+    if((query.size() != 0) && query.last()){
         if(id >= query.value(0).toInt())
-            id++;
+            id += query.value(0).toInt();
     }
     return id;
 }

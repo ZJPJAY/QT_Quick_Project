@@ -25,16 +25,6 @@ MyTcpSocket *MyTcpSocket::getObject()
     return mtsObj;
 }
 
-void MyTcpSocket::sendData()
-{
-    QJsonObject obj;
-    obj.insert("Sender","gateway");
-    obj.insert("Name",1001);
-    obj.insert("Value",36.5);
-
-    MyTcpSocket::getObject()->write(QJsonDocument(obj).toJson());
-}
-
 void MyTcpSocket::sendDataTem(double value)
 {
     MyTcpSocket::getObject()->write("{\"Sender\":\"gateway\",\"Name\":1001,\"Value\":" +
