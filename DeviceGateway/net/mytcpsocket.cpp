@@ -4,6 +4,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QHostAddress>
+#include "myserialport.h"
 
 MyTcpSocket * MyTcpSocket::mtsObj = nullptr;
 
@@ -128,10 +129,12 @@ void MyTcpSocket::handleFrame(QByteArray data)
             if(obj.value("Name").toInt() == 2001){//得到警报灯键值,并开启
                 if(obj.value("Value") == 1)qDebug() << "AlarmLight On";
                 if(obj.value("Value") == 0)qDebug() << "AlarmLight Off";
+                MySerialPort::getObject()->controlLight((unsigned char)obj.value("Value").toInt());
             }
             else if(obj.value("Name").toInt() == 2002){//得到警报器键值,并开启
                 if(obj.value("Value") == 1)qDebug() << "AlarmLight On";
                 if(obj.value("Value") == 0)qDebug() << "AlarmLight Off";
+                MySerialPort::getObject()->controlAlert((unsigned char)obj.value("Value").toInt());
             }
             else if(obj.value("Name").toInt() == 1001){
                 sendDataTem(obj.value("Value").toDouble());

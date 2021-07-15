@@ -47,7 +47,25 @@ bool SqlExec::addValue(int id,double value,QString tableName,QString propertyNam
     QString qd = (ok==1)? "[+] Insert Success!":"[-] Insert Failed!";
 
     qDebug() << qd.toUtf8().data() << current_date.toUtf8().data();
-    if(db->lastError().type() != 0)qDebug() << db->lastError().text().toUtf8().data();
+    qDebug() << db->lastError().text() << "  " << cmd;
+    return ok;
+}
+
+bool SqlExec::addValue(int id, int value, QString tableName, QString propertyName)
+{
+    QString cmd;
+    QDateTime current_date_time =QDateTime::currentDateTime();
+    QString current_date =current_date_time.toString("yyyy-MM-dd hh:mm:ss");
+    cmd = QString("INSERT INTO %1 "
+                  "(id, %2, add_time) "
+                  "VALUES(%3,%4,'%5');").arg(tableName).arg(propertyName).arg(id).arg(value).arg(current_date);
+
+    QSqlQuery query(*db);
+    bool ok = query.exec(cmd);
+    QString qd = (ok==1)? "[+] Insert Success!":"[-] Insert Failed!";
+
+    qDebug() << qd.toUtf8().data() << current_date.toUtf8().data();
+    qDebug() << db->lastError().text();
     return ok;
 }
 /*
@@ -87,8 +105,9 @@ int SqlExec::selectValue(QString tableName)
 
     if(!ok){qDebug()<< "[-] SelectValue Return False!"; return false;}
     if((query.size() != 0) && query.last()){
-        if(id >= query.value(0).toInt())
+        if(id <= query.value(0).toInt()){
             id += query.value(0).toInt();
+        }
     }
     return id;
 }

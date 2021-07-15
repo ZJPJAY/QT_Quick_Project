@@ -53,5 +53,5 @@ void MainPage::on_btnSerialOpen_clicked()
 
 void MainPage::on_btnTest_clicked()
 {
-    MyTcpSocket::getObject()->sendDataTem(36.5);
+    MySerialPort::getObject()->controlLight(1);
 }

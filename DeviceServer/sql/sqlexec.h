@@ -11,6 +11,7 @@ public:
     explicit SqlExec(QString name, QObject *parent = nullptr);
     bool addValue(int id,QString name);
     bool addValue(int id, double value, QString tableName,QString propertyName);
+    bool addValue(int id, int value, QString tableName,QString propertyName);
     bool addValue(int id, int value);
     int selectValue(QString tableName);
     //bool deleteValue(QString tableName,QString typeName,QString deleteThing);

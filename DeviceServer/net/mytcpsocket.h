@@ -10,14 +10,14 @@ class MyTcpSocket : public QTcpSocket
 public:
     explicit MyTcpSocket(QObject *parent = nullptr);
     void setDB(SqlExec *db);
-    void sendDataToAllClient(const QByteArray &data);
 
 signals:
     void sendData(QByteArray data);//群发的触发信号
 
 public:
     void sendDataSlot(QByteArray data);
-    //从MyTcpServer上绑定回来的信号槽，即每个socket都绑定了，只要触发一个socket上的senData信号就会触发所有socket的该信号槽
+    //从MyTcpServer上绑定回来的信号槽，即每个socket都绑定了
+    //只要触发一个socket上的senData信号就会触发所有socket的该信号槽
 
 protected slots:
     void readyReadSlot();

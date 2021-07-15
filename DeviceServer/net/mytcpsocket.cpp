@@ -47,6 +47,7 @@ void MyTcpSocket::readyReadSlot()
 void MyTcpSocket::disconnectedSlot()
 {
     emit socketDisconnected(thread());
+    qDebug() << "[-] One Tcp Disconnecting!";
 }
 
 void MyTcpSocket::handleData(QByteArray data)//解析完整的Json格式数据
@@ -102,7 +103,7 @@ void MyTcpSocket::handleFrame(QByteArray data)
                 qDebug() << "   LightIntensity: " << obj.value("Value").toDouble();
 
                 this->sqlExec->addValue(this->sqlExec->selectValue("models_light")
-                                        ,obj.value("Value").toDouble(),"models_light","illumination");
+                                        ,obj.value("Value").toInt(),"models_light","illumination");
             }
             if(obj.value("Name") == 1004){
                 qDebug() << "   UltraRays: " << obj.value("Value").toDouble();
@@ -116,16 +117,11 @@ void MyTcpSocket::handleFrame(QByteArray data)
                 this->sqlExec->addValue(this->sqlExec->selectValue("models_co2")
                                         ,obj.value("Value").toInt(),"models_co2","co2_consistence");
             }
-            if(obj.value("Name.5") == 1006){
+            if(obj.value("Name") == 1006){
                 qDebug() << "   PM2.5: " << obj.value("Value").toDouble();
 
                 this->sqlExec->addValue(this->sqlExec->selectValue("models_pm25")
                                         ,obj.value("Value").toInt(),"models_pm25","pm25_consistence");
-            }
-            if(obj.value("Name") == 2001 || obj.value("Name") == 2002){
-                qDebug() << "   Signal: " << obj.value("Name").toInt() << "  Value: " << obj.value("Value").toInt();
-                emit sendData(data);
-                //触发MyTcpSocket的sendData信号，该信号在MyTcpServer中也定义了，所以可以在Server上两者相绑定
             }
             qDebug() << "}";
         }
@@ -137,8 +133,15 @@ void MyTcpSocket::handleFrame(QByteArray data)
         }
         else if(obj.value("Sender") == "back end"){
             if(obj.value("Name") == 2001 || obj.value("Name") == 2002){
+                qDebug() << "Data:";
+                qDebug() << "{";
+
                 qDebug() << "   Signal: " << obj.value("Name").toInt() << "  Value: " << obj.value("Value").toInt();
-                emit sendData(data);//等同gateway该处判断
+                emit sendData(data);//触发MyTcpSocket的sendData信号，该信号在MyTcpServer中也定义了，所以可以在Server上两者相绑定
+
+                qDebug() << obj;
+
+                qDebug() << "}";
             }
         }
     }
