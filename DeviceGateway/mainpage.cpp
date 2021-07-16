@@ -44,14 +44,21 @@ void MainPage::netDisconnectedSlot()
 
 void MainPage::on_btnSerialOpen_clicked()
 {
-    MySerialPort::getObject()->setPortName(ui->cbSerialPortList->currentText());
-
-    bool ok = MySerialPort::getObject()->open(QIODevice::ReadWrite);
+    MySerialPort::getObject()->setPortName(
+                ui->cbSerialPortList->currentText()
+                );
+    bool ok = MySerialPort::getObject()
+            ->open(QIODevice::ReadWrite);
     if(ok)
         ui->btnSerialOpen->setEnabled(false);
 }
 
 void MainPage::on_btnTest_clicked()
 {
-    MySerialPort::getObject()->controlLight(1);
+    MySerialPort::getObject()->requestTeAndHu();
+    MySerialPort::getObject()->requestLig();
+    MySerialPort::getObject()->requestCo2();
+    MySerialPort::getObject()->requestUlt();
+    MySerialPort::getObject()->requestPm();
+
 }

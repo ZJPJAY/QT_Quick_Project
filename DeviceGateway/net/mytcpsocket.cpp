@@ -15,7 +15,6 @@ MyTcpSocket::MyTcpSocket(QObject *parent) : QTcpSocket(parent)
             this,
             &MyTcpSocket::readyReadSlot);
 
-
     qDebug() << "[+] New Tcp Conecting!";
 }
 
@@ -148,15 +147,15 @@ void MyTcpSocket::handleFrame(QByteArray data)
                 sendDataLig(obj.value("Value").toDouble());
                 qDebug() << "Sending LightIntensity Data";
             }
-            else if(obj.value("Name").toInt() == 1001){
+            else if(obj.value("Name").toInt() == 1004){
                 sendDataUlt(obj.value("Value").toInt());
                 qDebug() << "Sending UltraRays Data";
             }
-            else if(obj.value("Name").toInt() == 1001){
+            else if(obj.value("Name").toInt() == 1005){
                 sendDataCo2(obj.value("Value").toInt());
                 qDebug() << "Sending CO2 Data";
             }
-            else if(obj.value("Name").toInt() == 1001){
+            else if(obj.value("Name").toInt() == 1006){
                 sendDataPm(obj.value("Value").toInt());
                 qDebug() << "Sending PM2.5 Data";
             }

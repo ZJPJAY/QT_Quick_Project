@@ -39,8 +39,8 @@ bool SqlExec::addValue(int id,double value,QString tableName,QString propertyNam
     QDateTime current_date_time =QDateTime::currentDateTime();
     QString current_date =current_date_time.toString("yyyy-MM-dd hh:mm:ss");
     cmd = QString("INSERT INTO %1 "
-                  "(id, %2, add_time) "
-                  "VALUES(%3,%4,'%5');").arg(tableName).arg(propertyName).arg(id).arg(value).arg(current_date);
+                  "(id, %2, add_time,device_id_id) "
+                  "VALUES(%3,%4,'%5',%6);").arg(tableName).arg(propertyName).arg(id).arg(value).arg(current_date).arg(1);
 
     QSqlQuery query(*db);
     bool ok = query.exec(cmd);
@@ -57,8 +57,8 @@ bool SqlExec::addValue(int id, int value, QString tableName, QString propertyNam
     QDateTime current_date_time =QDateTime::currentDateTime();
     QString current_date =current_date_time.toString("yyyy-MM-dd hh:mm:ss");
     cmd = QString("INSERT INTO %1 "
-                  "(id, %2, add_time) "
-                  "VALUES(%3,%4,'%5');").arg(tableName).arg(propertyName).arg(id).arg(value).arg(current_date);
+                  "(id, %2, add_time,device_id_id) "
+                  "VALUES(%3,%4,'%5',%6);").arg(tableName).arg(propertyName).arg(id).arg(value).arg(current_date).arg(1);
 
     QSqlQuery query(*db);
     bool ok = query.exec(cmd);

@@ -90,38 +90,38 @@ void MyTcpSocket::handleFrame(QByteArray data)
             if(obj.value("Name") == 1001){
                 qDebug() << "   Temperature: " << obj.value("Value").toDouble();
 
-                this->sqlExec->addValue(this->sqlExec->selectValue("models_temperature")
-                                        ,obj.value("Value").toDouble(),"models_temperature","temperature");
+                this->sqlExec->addValue(this->sqlExec->selectValue("temperature_temperature")
+                                        ,obj.value("Value").toDouble(),"temperature_temperature","temperature");
             }
             if(obj.value("Name") == 1002){
                 qDebug() << "   Humidity: " << obj.value("Value").toDouble();
 
-                this->sqlExec->addValue(this->sqlExec->selectValue("models_Humidity")
-                                        ,obj.value("Value").toDouble(),"models_Humidity","humidity_consistence");
+                this->sqlExec->addValue(this->sqlExec->selectValue("Humidity_Humidity")
+                                        ,obj.value("Value").toDouble(),"Humidity_Humidity","humidity_consistence");
             }
             if(obj.value("Name") == 1003){
                 qDebug() << "   LightIntensity: " << obj.value("Value").toDouble();
 
-                this->sqlExec->addValue(this->sqlExec->selectValue("models_light")
-                                        ,obj.value("Value").toInt(),"models_light","illumination");
+                this->sqlExec->addValue(this->sqlExec->selectValue("Light_light")
+                                        ,qAbs(obj.value("Value").toInt()),"Light_light","illumination");
             }
             if(obj.value("Name") == 1004){
                 qDebug() << "   UltraRays: " << obj.value("Value").toDouble();
 
-                this->sqlExec->addValue(this->sqlExec->selectValue("models_uv")
-                                        ,obj.value("Value").toInt(),"models_uv","ultraviolet_rays");
+                this->sqlExec->addValue(this->sqlExec->selectValue("uv_uv")
+                                        ,obj.value("Value").toInt(),"uv_uv","ultraviolet_rays");
             }
             if(obj.value("Name") == 1005){
                 qDebug() << "   CO2: " << obj.value("Value").toDouble();
 
-                this->sqlExec->addValue(this->sqlExec->selectValue("models_co2")
-                                        ,obj.value("Value").toInt(),"models_co2","co2_consistence");
+                this->sqlExec->addValue(this->sqlExec->selectValue("co2_co2")
+                                        ,obj.value("Value").toInt(),"co2_co2","co2_consistence");
             }
             if(obj.value("Name") == 1006){
                 qDebug() << "   PM2.5: " << obj.value("Value").toDouble();
 
-                this->sqlExec->addValue(this->sqlExec->selectValue("models_pm25")
-                                        ,obj.value("Value").toInt(),"models_pm25","pm25_consistence");
+                this->sqlExec->addValue(this->sqlExec->selectValue("pm25_pm25")
+                                        ,obj.value("Value").toInt(),"pm25_pm25","pm25_consistence");
             }
             qDebug() << "}";
         }
