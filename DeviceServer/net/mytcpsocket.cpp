@@ -103,7 +103,7 @@ void MyTcpSocket::handleFrame(QByteArray data)
                 qDebug() << "   LightIntensity: " << obj.value("Value").toDouble();
 
                 this->sqlExec->addValue(this->sqlExec->selectValue("Light_light")
-                                        ,qAbs(obj.value("Value").toInt()),"Light_light","illumination");
+                                        ,abs(obj.value("Value").toDouble()),"Light_light","illumination");
             }
             if(obj.value("Name") == 1004){
                 qDebug() << "   UltraRays: " << obj.value("Value").toDouble();

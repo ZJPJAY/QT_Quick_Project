@@ -281,6 +281,7 @@ void MySerialPort::handleFrame(QByteArray data)
 
             lig = abs((double)data.at(8)) + (((double)data.at(9))*0.001);
             MyTcpSocket::getObject()->sendDataLig(lig);
+            qDebug() << lig;
         }
         else if(devID == 0x04){
 
